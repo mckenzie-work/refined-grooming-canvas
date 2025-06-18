@@ -1,73 +1,268 @@
-# Welcome to your Lovable project
 
-## Project info
+# Precision Barbershop - Premium Booking Website
 
-**URL**: https://lovable.dev/projects/c604b57c-5ff7-4976-a6bc-cb2a267a45e1
+A world-class React-based booking website for a premium barbershop, featuring minimalist black & white aesthetics inspired by Stripe, Frama, and Ritual.
 
-## How can I edit this code?
+## 🎯 Project Overview
 
-There are several ways of editing your application.
+This is a visually striking, technically clean booking platform designed for award-level UX/UI with future Django backend integration capabilities.
 
-**Use Lovable**
+## 🚀 Features
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/c604b57c-5ff7-4976-a6bc-cb2a267a45e1) and start prompting.
+### Pages Implemented
+- **Home Page**: Fullscreen hero video with elegant navigation
+- **Booking Page**: Clean form with Django integration points
+- **Gallery Page**: Horizontal scroll gallery with image modal
+- **Admin Page**: Authentication scaffold for future development
 
-Changes made via Lovable will be committed automatically to this repo.
+### Design System
+- **Palette**: Black, white, neutral grays with subtle rose/chrome accents
+- **Typography**: Space Grotesk (headlines) + Inter (body)
+- **Animations**: Subtle, motion-safe transitions
+- **Layout**: Generous white space and editorial composition
 
-**Use your preferred IDE**
+## 🛠 Technical Stack
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- **Frontend**: React 18 + TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS
+- **UI Components**: shadcn/ui
+- **State Management**: TanStack Query
+- **Routing**: React Router DOM
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 📦 Installation & Setup
 
-Follow these steps:
+```bash
+# Clone the repository
+git clone <repository-url>
+cd precision-barbershop
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# Install dependencies
+npm install
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start development server
 npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
 ```
 
-**Edit a file directly in GitHub**
+## 🔌 Backend Integration Points
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Django API Endpoints (To Implement)
 
-**Use GitHub Codespaces**
+```python
+# Booking endpoints
+POST /api/bookings/          # Create new booking
+GET  /api/bookings/          # List all bookings (admin)
+GET  /api/bookings/{id}/     # Get booking details
+PUT  /api/bookings/{id}/     # Update booking
+DELETE /api/bookings/{id}/   # Cancel booking
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+# Authentication endpoints
+POST /api/auth/login/        # Admin login
+POST /api/auth/logout/       # Admin logout
+GET  /api/auth/user/         # Get current user
 
-## What technologies are used for this project?
+# Availability endpoints
+GET /api/availability/       # Get available time slots
+```
 
-This project is built with:
+### Form Submission Integration
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Replace the placeholder in `src/pages/Booking.tsx`:
 
-## How can I deploy this project?
+```typescript
+// Current placeholder
+await new Promise(resolve => setTimeout(resolve, 1500));
 
-Simply open [Lovable](https://lovable.dev/projects/c604b57c-5ff7-4976-a6bc-cb2a267a45e1) and click on Share -> Publish.
+// Replace with Django API call
+const response = await fetch('/api/bookings/', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-CSRFToken': getCsrfToken(),
+  },
+  body: JSON.stringify({
+    customer_name: formData.name,
+    phone_number: formData.phone,
+    service_type: formData.service,
+    appointment_date: formData.date,
+    appointment_time: formData.time,
+    notes: formData.notes
+  })
+});
+```
 
-## Can I connect a custom domain to my Lovable project?
+## 🎨 Design Guidelines
 
-Yes, you can!
+### Color Palette
+```css
+/* Primary Colors */
+--barbershop-black: #0a0a0a
+--barbershop-charcoal: #1a1a1a
+--barbershop-rose: #d4a574
+--barbershop-chrome: #e5e7eb
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+/* Gray Scale */
+--barbershop-gray-50: #fafafa
+--barbershop-gray-100: #f4f4f5
+--barbershop-gray-900: #18181b
+```
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+### Typography Scale
+- **Headlines**: Space Grotesk (300, 400, 500)
+- **Body Text**: Inter (300, 400, 500, 600)
+- **Buttons**: Inter Medium (500)
+
+### Component Classes
+```css
+.premium-input     /* Large, touch-friendly inputs */
+.premium-button    /* Primary CTA buttons */
+.premium-button-outline /* Secondary buttons */
+.grain-overlay     /* Subtle texture overlay */
+```
+
+## 📱 Responsive Design
+
+- **Mobile First**: Designed for touch interfaces
+- **Breakpoints**: sm (640px), md (768px), lg (1024px), xl (1280px)
+- **Touch Targets**: Minimum 44px for interactive elements
+- **Performance**: Optimized images and lazy loading
+
+## ♿ Accessibility Features
+
+- Semantic HTML structure
+- ARIA labels and roles
+- Keyboard navigation support
+- Screen reader compatibility
+- High contrast ratios
+- Focus management
+
+## 🔒 Security Considerations
+
+When integrating with Django backend:
+
+```python
+# Add CSRF protection
+from django.middleware.csrf import get_token
+
+# Rate limiting
+from django_ratelimit.decorators import ratelimit
+
+@ratelimit(key='ip', rate='5/m', method='POST')
+def create_booking(request):
+    # Booking creation logic
+    pass
+
+# Input validation
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+```
+
+## 📄 Environment Variables
+
+Create `.env` file:
+
+```bash
+# API Configuration
+VITE_API_BASE_URL=http://localhost:8000/api
+VITE_DJANGO_CSRF_COOKIE_NAME=csrftoken
+
+# Analytics (Optional)
+VITE_GA_TRACKING_ID=your-ga-id
+VITE_HOTJAR_ID=your-hotjar-id
+
+# Feature Flags
+VITE_ENABLE_ADMIN=true
+VITE_ENABLE_ANALYTICS=false
+```
+
+## 🚀 Deployment
+
+### Vercel (Recommended)
+```bash
+npm install -g vercel
+vercel --prod
+```
+
+### Netlify
+```bash
+npm run build
+# Upload dist/ folder to Netlify
+```
+
+### Docker
+```dockerfile
+FROM node:18-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+COPY . .
+RUN npm run build
+EXPOSE 3000
+CMD ["npm", "run", "preview"]
+```
+
+## 📊 Performance Optimization
+
+- **Images**: WebP format with fallbacks
+- **Videos**: Multiple formats (.mp4, .webm)
+- **Fonts**: Preloaded critical fonts
+- **Code Splitting**: Route-based chunks
+- **Bundle Size**: Tree-shaking enabled
+
+## 🧪 Testing
+
+```bash
+# Unit tests
+npm run test
+
+# E2E tests
+npm run test:e2e
+
+# Performance audit
+npm run lighthouse
+```
+
+## 📈 Analytics Integration
+
+```typescript
+// Google Analytics 4
+gtag('event', 'booking_started', {
+  event_category: 'engagement',
+  event_label: 'booking_form'
+});
+
+// Custom events
+analytics.track('Appointment Booked', {
+  service: formData.service,
+  date: formData.date,
+  value: getServicePrice(formData.service)
+});
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open Pull Request
+
+## 📝 License
+
+This project is proprietary software. All rights reserved.
+
+## 📞 Support
+
+For technical support or questions:
+- Email: dev@precisionbarbershop.com
+- Phone: (555) 123-4567
+
+---
+
+**Built with ❤️ for exceptional barbershop experiences**
